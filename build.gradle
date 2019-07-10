@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'osgi'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "io.spring.dependency-management"
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.kill-bill.billing:killbill-oss-parent:$killbillOssParentVersion") {
+            bomProperty 'killbill.version', killbillVersion
+        }
+    }
+}
+
+dependencies {
+    compile 'org.kill-bill.billing.plugin:killbill-plugin-api-usage'
+    compile 'org.kill-bill.billing.plugin.java:killbill-base-plugin'
+}
+
+jar {
+    manifest {
+        instruction 'Bundle-Activator', '${classes;IMPLEMENTS;org.osgi.framework.BundleActivator}'
+        instruction 'Private-Package', 'com.carfax.killbill.plugin'
+        instruction 'Export-Package', ''
+        instruction 'Import-Package', "$killbillImportPackages,$javaImportPackages,*;resolution:=optional;version=!"
+    }
+}
+
+shadowJar.dependsOn jar
+build.dependsOn shadowJar
