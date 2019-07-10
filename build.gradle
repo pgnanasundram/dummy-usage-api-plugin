@@ -15,7 +15,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: "io.spring.dependency-management"
 
 group 'com.example'
-version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 

@@ -5,4 +5,4 @@ To see dependencies:
 `./gradlew dependencies`
 
 Plugin location:
-`./build/libs/killbill-example-plugin-all.jar`
+`./build/libs/dummy-usage-api-plugin-all.jar`
